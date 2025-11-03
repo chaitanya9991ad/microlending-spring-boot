@@ -1,0 +1,1548 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Microlend - Fast, Reliable Loans</title>
+
+    <style>
+        /* --- Global Styles & Resets --- */
+        :root {
+            --primary-color: #0052cc; /* Fintech Blue */
+            --primary-hover: #003p4a;
+            --secondary-color: #f4f5f7; /* Light background */
+            --text-color: #333;
+            --text-light: #777;
+            --border-color: #ddd;
+            --success-color: #08a745;
+            --danger-color: #dc3545;
+            --white-color: #ffffff;
+            --shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+            --border-radius: 8px;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+            background-color: var(--secondary-color);
+            color: var(--text-color);
+            line-height: 1.6;
+            display: flex;
+            flex-direction: column;
+            min-height: 100vh;
+        }
+
+        .container {
+            width: 90%;
+            max-width: 1200px;
+            margin: 2rem auto;
+            padding: 1.5rem;
+            background: var(--white-color);
+            border-radius: var(--border-radius);
+            box-shadow: var(--shadow);
+        }
+
+        /* --- Navigation --- */
+        .navbar {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 1rem 5%;
+            background: var(--white-color);
+            box-shadow: var(--shadow);
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+        }
+
+        .navbar .logo {
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: var(--primary-color);
+            text-decoration: none;
+            cursor: pointer;
+        }
+
+        .navbar-links {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+
+        .navbar-links .nav-link,
+        .navbar-links .btn {
+            text-decoration: none;
+            padding: 0.5rem 1rem;
+            border-radius: var(--border-radius);
+            font-weight: 500;
+            cursor: pointer;
+            border: none;
+            font-size: 1rem;
+            white-space: nowrap;
+        }
+
+        .nav-user-name {
+            font-weight: 500;
+            margin-right: 1rem;
+        }
+
+        /* --- Buttons --- */
+        .btn {
+            padding: 0.75rem 1.5rem;
+            border: none;
+            border-radius: var(--border-radius);
+            cursor: pointer;
+            font-size: 1rem;
+            font-weight: 600;
+            transition: all 0.2s ease;
+        }
+
+        .btn-primary {
+            background-color: var(--primary-color);
+            color: var(--white-color);
+        }
+        .btn-primary:hover {
+            opacity: 0.85;
+        }
+
+        .btn-secondary {
+            background-color: var(--secondary-color);
+            color: var(--primary-color);
+            border: 1px solid var(--primary-color);
+        }
+        .btn-secondary:hover {
+            background-color: #e9ecef;
+        }
+
+        .btn-danger {
+            background-color: var(--danger-color);
+            color: var(--white-color);
+        }
+        .btn-success {
+            background-color: var(--success-color);
+            color: var(--white-color);
+        }
+
+        /* --- Forms --- */
+        .form-container {
+            max-width: 500px;
+            margin: 2rem auto;
+            padding: 2rem;
+            background: var(--white-color);
+            border-radius: var(--border-radius);
+            box-shadow: var(--shadow);
+        }
+
+        .form-group {
+            margin-bottom: 1.5rem;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 0.5rem;
+            font-weight: 600;
+        }
+
+        .form-group input,
+        .form-group select,
+        .form-group textarea {
+            width: 100%;
+            padding: 0.75rem;
+            border: 1px solid var(--border-color);
+            border-radius: var(--border-radius);
+            font-size: 1rem;
+        }
+
+        .form-container h2 {
+            text-align: center;
+            margin-bottom: 1.5rem;
+            color: var(--primary-color);
+        }
+
+        .form-link {
+            text-align: center;
+            margin-top: 1rem;
+        }
+        .form-link a {
+            color: var(--primary-color);
+            text-decoration: none;
+            font-weight: 600;
+        }
+
+        /* --- Page View Management --- */
+        .view {
+            display: none; /* All views are hidden by default */
+        }
+        #home-view {
+            display: block; /* Show home view by default */
+        }
+
+        /* --- Hero Section (Home View) --- */
+        .hero {
+            text-align: center;
+            padding: 4rem 1rem;
+            background: var(--white-color);
+            border-radius: var(--border-radius);
+        }
+        .hero h1 {
+            font-size: 3rem;
+            color: var(--primary-color);
+            margin-bottom: 1rem;
+        }
+        .hero p {
+            font-size: 1.25rem;
+            color: var(--text-light);
+            margin-bottom: 2rem;
+        }
+
+        /* --- Dashboard Specific --- */
+        .dashboard-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 1.5rem;
+            margin-bottom: 2rem;
+        }
+        .card {
+            background: var(--white-color);
+            padding: 1.5rem;
+            border-radius: var(--border-radius);
+            box-shadow: var(--shadow);
+        }
+        .card h3 {
+            font-size: 1rem;
+            color: var(--text-light);
+            margin-bottom: 0.5rem;
+            text-transform: uppercase;
+        }
+        .card .amount {
+            font-size: 2.25rem;
+            font-weight: 700;
+            color: var(--primary-color);
+        }
+        .card .amount.negative {
+            color: var(--danger-color);
+        }
+
+        /* --- Tables --- */
+        .table-container {
+            overflow-x: auto;
+            background: var(--white-color);
+            border-radius: var(--border-radius);
+            box-shadow: var(--shadow);
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+        th, td {
+            padding: 1rem;
+            text-align: left;
+            border-bottom: 1px solid var(--border-color);
+        }
+        th {
+            background-color: var(--secondary-color);
+            font-weight: 600;
+        }
+        tr:last-child td {
+            border-bottom: none;
+        }
+        tr:hover {
+            background-color: #fcfcfc;
+        }
+        .status {
+            padding: 0.25rem 0.75rem;
+            border-radius: 20px;
+            font-weight: 600;
+            font-size: 0.85rem;
+            white-space: nowrap;
+        }
+        .status-PENDING { background-color: #ffc; border: 1px solid #e6db55; color: #666; }
+        .status-APPROVED { background-color: #d4edda; border: 1px solid var(--success-color); color: #155724; }
+        .status-REJECTED { background-color: #f8d7da; border: 1px solid var(--danger-color); color: #721c24; }
+        .status-PAID { background-color: #d4edda; color: #155724; }
+        .status-COMPLETED { background-color: #d4edda; border: 1px solid var(--success-color); color: #155724; }
+        .status-FAILED { background-color: #f8d7da; border: 1px solid var(--danger-color); color: #721c24; }
+        .status-CLOSED { background-color: #d1ecf1; border: 1px solid #bee5eb; color: #0c5460; }
+        .status-SUCCESS { background-color: #d4edda; color: #155724; }
+
+
+        /* --- Admin Loan Detail View --- */
+        .loan-detail-grid {
+            display: grid;
+            grid-template-columns: 2fr 1fr;
+            gap: 1.5rem;
+        }
+        .document-viewer {
+            border: 1px solid var(--border-color);
+            border-radius: var(--border-radius);
+            padding: 1rem;
+        }
+        .document-viewer iframe {
+            width: 100%;
+            height: 500px;
+            border: 1px solid #eee;
+        }
+
+        /* --- NEW: Style for multiple doc buttons --- */
+        .document-viewer .btn {
+            margin-right: 0.5rem;
+            margin-bottom: 0.5rem;
+        }
+
+        /* --- NEW: Payment Modal --- */
+        .modal-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.6);
+            z-index: 2000;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+        .modal-content {
+            background: var(--white-color);
+            padding: 2rem;
+            border-radius: var(--border-radius);
+            box-shadow: 0 5px 15px rgba(0,0,0,0.3);
+            width: 90%;
+            max-width: 450px;
+        }
+        .modal-content h2 {
+            margin-top: 0;
+            color: var(--primary-color);
+        }
+        .modal-details p {
+            font-size: 1.1rem;
+            line-height: 1.8;
+        }
+        .modal-details p strong {
+            color: var(--text-color);
+        }
+        .modal-actions {
+            margin-top: 1.5rem;
+            display: flex;
+            justify-content: flex-end;
+            gap: 1rem;
+        }
+
+        /* --- Utility Classes --- */
+        .hidden {
+            display: none !important;
+        }
+        .text-center {
+            text-align: center;
+        }
+        .mt-2 {
+            margin-top: 2rem;
+        }
+        .mb-2 {
+            margin-bottom: 2rem;
+        }
+
+        /* --- Toast Notification --- */
+        #toast {
+            position: fixed;
+            bottom: 20px;
+            left: 50%;
+            transform: translateX(-50%);
+            padding: 1rem 2rem;
+            border-radius: var(--border-radius);
+            color: var(--white-color);
+            font-weight: 600;
+            z-index: 2000;
+            opacity: 0;
+            transition: opacity 0.3s, bottom 0.3s;
+        }
+        #toast.show {
+            opacity: 1;
+            bottom: 40px;
+        }
+        #toast.success { background-color: var(--success-color); }
+        #toast.error { background-color: var(--danger-color); }
+
+        /* --- Loading Spinner --- */
+        #loader {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(255, 255, 255, 0.7);
+            z-index: 9998;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+        .spinner {
+            width: 50px;
+            height: 50px;
+            border: 5px solid var(--secondary-color);
+            border-top-color: var(--primary-color);
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+        }
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
+
+        /* --- Responsive --- */
+        @media (max-width: 768px) {
+            .navbar {
+                flex-direction: column;
+                align-items: flex-start;
+            }
+            .navbar-links {
+                flex-direction: column;
+                width: 100%;
+                margin-top: 1rem;
+            }
+            .navbar-links .btn, .navbar-links .nav-link {
+                width: 100%;
+                text-align: center;
+            }
+            .nav-user-name {
+                margin: 0.5rem 0;
+            }
+            .dashboard-grid {
+                grid-template-columns: 1fr;
+            }
+            .loan-detail-grid {
+                grid-template-columns: 1fr;
+            }
+            .hero h1 {
+                font-size: 2.2rem;
+            }
+            .modal-content {
+                width: 95%;
+            }
+        }
+
+    </style>
+</head>
+<body>
+
+<!-- ======== NAVIGATION BARS ======== -->
+<!-- Logged-Out Navigation -->
+<nav class="navbar" id="public-nav">
+    <a class="logo" data-view="home-view">Microlend</a>
+    <div class="navbar-links">
+        <button class="btn btn-secondary" data-view="login-view">Login</button>
+        <button class="btn btn-primary" data-view="register-view">Register</button>
+    </div>
+</nav>
+
+<!-- Logged-In "USER" Navigation -->
+<nav class="navbar hidden" id="user-nav">
+    <a class="logo" data-view="user-dashboard-view">Microlend</a>
+    <div class="navbar-links">
+        <span class="nav-user-name" id="user-nav-name"></span>
+        <a class="nav-link" data-view="user-dashboard-view">Dashboard</a>
+        <a class="nav-link" data-view="user-loans-view">My Loans</a>
+        <a class="nav-link" data-view="user-payments-view">My Payments</a>
+        <button class="btn btn-primary" data-view="user-request-loan-view">Request Loan</button>
+        <button class="btn btn-secondary" id="logout-btn-user">Logout</button>
+    </div>
+</nav>
+
+<!-- Logged-In "ADMIN" Navigation -->
+<nav class="navbar hidden" id="admin-nav">
+    <a class="logo" data-view="admin-dashboard-view">Microlend [ADMIN]</a>
+    <div class="navbar-links">
+        <span class="nav-user-name" id="admin-nav-name"></span>
+        <a class="nav-link" data-view="admin-dashboard-view">Loan Applications</a>
+        <a class="nav-link" data-view="admin-payments-view">All Payments</a>
+        <a class="nav-link" data-view="admin-create-admin-view">Create Admin</a>
+        <button class="btn btn-secondary" id="logout-btn-admin">Logout</button>
+    </div>
+</nav>
+
+<!-- ======== MAIN CONTENT AREA ======== -->
+<main>
+
+    <!-- --- 1. Home View (Public) --- -->
+    <div class="view" id="home-view">
+        <div class="hero container">
+            <h1>Welcome to Microlending Service</h1>
+            <p>Simple, fast, and reliable micro-loans when you need them most.</p>
+            <button class="btn btn-primary btn-lg" data-view="register-view">Get Started Today</button>
+        </div>
+    </div>
+
+    <!-- --- 2. Registration View (Public) --- -->
+    <div class="view" id="register-view">
+        <form class="form-container" id="register-form">
+            <h2>Create Your Account</h2>
+            <div class="form-group">
+                <label for="reg-name">Full Name</label>
+                <input type="text" id="reg-name" required>
+            </div>
+            <div class="form-group">
+                <label for="reg-email">Email</label>
+                <input type="email" id="reg-email" required>
+            </div>
+            <div class="form-group">
+                <label for="reg-phone">Mobile Number</label>
+                <input type="tel" id="reg-phone" required>
+            </div>
+            <div class="form-group">
+                <label for="reg-username">Username</label>
+                <input type="text" id="reg-username" required>
+            </div>
+            <div class="form-group">
+                <label for="reg-password">Password</label>
+                <input type="password" id="reg-password" required>
+            </div>
+            <button type="submit" class="btn btn-primary" style="width: 100%;">Register</button>
+            <p class="form-link">Already have an account? <a href="#" data-view="login-view">Login</a></p>
+        </form>
+    </div>
+
+    <!-- --- 3. Login View (Public) --- -->
+    <div class="view" id="login-view">
+        <form class="form-container" id="login-form">
+            <h2>Login</h2>
+            <!-- Step 1: Request OTP -->
+            <div id="login-step-1">
+                <div class="form-group">
+                    <label for="login-email">Email</label>
+                    <input type="email" id="login-email" required>
+                </div>
+                <button type="button" class="btn btn-primary" id="request-otp-btn" style="width: 100%;">Send OTP</button>
+            </div>
+            <!-- Step 2: Enter OTP -->
+            <div id="login-step-2" class="hidden">
+                <p class="text-center mb-2">An OTP was sent to <strong id="login-email-display"></strong>.</p>
+                <div class="form-group">
+                    <label for="login-otp">OTP Code</label>
+                    <input type="text" id="login-otp" required>
+                </div>
+                <button type="button" class="btn btn-primary" id="login-otp-btn" style="width: 100%;">Login</button>
+            </div>
+            <p class="form-link">Don't have an account? <a href="#" data-view="register-view">Register</a></p>
+        </form>
+    </div>
+
+    <!-- --- 4. User Dashboard View --- -->
+    <div class="view" id="user-dashboard-view">
+        <div class="container">
+            <h2 class="mb-2">Your Financial Snapshot</h2>
+            <div class="dashboard-grid">
+                <div class="card">
+                    <h3>Outstanding Amount</h3>
+                    <div class="amount negative" id="user-summary-outstanding">₹0.00</div>
+                </div>
+                <div class="card">
+                    <h3>Total Loan Amount</h3>
+                    <div class="amount" id="user-summary-total-loan">₹0.00</div>
+                </div>
+                <div class="card">
+                    <h3>Total Paid</h3>
+                    <div class="amount" id="user-summary-total-paid">₹0.00</div>
+                </div>
+                <div class="card">
+                    <h3>Active Loans</h3>
+                    <div class="amount" id="user-summary-total-loans">0</div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- --- 5. User My Loans View --- -->
+    <div class="view" id="user-loans-view">
+        <div class="container">
+            <h2 class="mb-2">My Loans</h2>
+            <div class="table-container">
+                <table>
+                    <thead>
+                    <tr>
+                        <th>Loan ID</th>
+                        <th>Amount</th>
+                        <th>Interest Rate</th>
+                        <th>Term</th>
+                        <th>Purpose</th>
+                        <th>Status</th>
+                        <th>Actions</th>
+                    </tr>
+                    </thead>
+                    <tbody id="user-loans-table-body">
+                    <!-- JS will populate this -->
+                    </tbody>
+                </table>
+            </div>
+            <div id="user-loan-installments" class="mt-2 hidden">
+                <h3>Installment Schedule</h3>
+                <div class="table-container">
+                    <table>
+                        <thead>
+                        <tr>
+                            <th>Due Date</th>
+                            <th>Amount</th>
+                            <th>Status</th>
+                            <th>Action</th>
+                        </tr>
+                        </thead>
+                        <tbody id="user-installments-table-body">
+                        <!-- JS will populate this -->
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- --- 6. User My Payments View --- -->
+    <div class="view" id="user-payments-view">
+        <div class="container">
+            <h2 class="mb-2">My Payments</h2>
+            <div class="table-container">
+                <table>
+                    <thead>
+                    <tr>
+                        <th>Payment ID</th>
+                        <th>Loan ID</th>
+                        <th>Amount</th>
+                        <th>Date</th>
+                        <th>Status</th>
+                    </tr>
+                    </thead>
+                    <tbody id="user-payments-table-body">
+                    <!-- JS will populate this -->
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+
+    <!-- --- 7. User Request Loan View --- -->
+    <div class="view" id="user-request-loan-view">
+        <form class="form-container" id="request-loan-form">
+            <h2>Request a New Loan</h2>
+            <div class="form-group">
+                <label for="loan-amount">Amount (₹)</label>
+                <input type="number" id="loan-amount" step="0.01" required>
+            </div>
+            <div class="form-group">
+                <label for="loan-purpose">Purpose</label>
+                <textarea id="loan-purpose" rows="4" required></textarea>
+            </div>
+            <div class="form-group">
+                <label for="loan-document">Supporting Document 1 (e.g., Aadhaar Card)</label>
+                <input type="file" id="loan-document" required>
+            </div>
+            <!-- --- NEW: Second file input --- -->
+            <div class="form-group">
+                <label for="loan-document-2">Supporting Document 2 (e.g., PAN Card)</label>
+                <input type="file" id="loan-document-2" required>
+            </div>
+            <button type="submit" class="btn btn-primary" style="width: 100%;">Submit Application</button>
+        </form>
+    </div>
+
+    <!-- --- 8. Admin Dashboard (View Loans) --- -->
+    <div class="view" id="admin-dashboard-view">
+        <div class="container">
+            <h2 class="mb-2">Loan Applications</h2>
+            <div class="table-container">
+                <table>
+                    <thead>
+                    <tr>
+                        <th>Loan ID</th>
+                        <th>User</th>
+                        <th>Amount</th>
+                        <th>Purpose</th>
+                        <th>Status</th>
+                        <th>Action</th>
+                    </tr>
+                    </thead>
+                    <tbody id="admin-loans-table-body">
+                    <!-- JS will populate this -->
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+
+    <!-- --- 9. Admin Loan Detail View --- -->
+    <div class="view" id="admin-loan-detail-view">
+        <div class="container">
+            <h2 class="mb-2">Review Loan Application <span id="admin-detail-loan-id"></span></h2>
+            <div class="loan-detail-grid">
+                <!-- Left Column: Details & Document -->
+                <div>
+                    <div class="card mb-2">
+                        <h3>Loan Details</h3>
+                        <p><strong>User:</strong> <span id="admin-detail-user"></span></p>
+                        <p><strong>Amount:</strong> <span id="admin-detail-amount"></span></p>
+                        <p><strong>Purpose:</strong> <span id="admin-detail-purpose"></span></p>
+                    </div>
+                    <div class="document-viewer card">
+                        <h3>Document Viewer</h3>
+
+                        <!-- --- UPDATED: Button for Document 1 --- -->
+                        <button
+                                id="admin-doc-download-btn"
+                                class="btn btn-secondary"
+                                data-loan-id=""
+                                data-doc-name=""
+                        >
+                            Download Document 1
+                        </button>
+
+                        <!-- --- NEW: Button for Document 2 --- -->
+                        <button
+                                id="admin-doc-2-download-btn"
+                                class="btn btn-secondary hidden"
+                                data-loan-id=""
+                                data-doc-name=""
+                        >
+                            Download Document 2
+                        </button>
+
+                    </div>
+                </div>
+
+                <!-- Right Column: Admin Actions -->
+                <div class="card">
+                    <h3>Admin Actions</h3>
+                    <form id="admin-approve-form">
+                        <h4>Approve Loan</h4>
+                        <div class="form-group">
+                            <label for="admin-interest-rate">Interest Rate (%)</label>
+                            <input type="number" id="admin-interest-rate" step="0.1" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="admin-term-months">Term (Months)</label>
+                            <input type="number" id="admin-term-months" required>
+                        </div>
+                        <button type="submit" class="btn btn-success" style="width: 100%;">Approve</button>
+                    </form>
+                    <hr style="margin: 1.5rem 0;">
+                    <button id="admin-reject-btn" class="btn btn-danger" style="width: 100%;">Reject Loan</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- --- 10. Admin Create Admin View --- -->
+    <div class="view" id="admin-create-admin-view">
+        <form class="form-container" id="create-admin-form">
+            <h2>Create New Admin</h2>
+            <div class="form-group">
+                <label for="admin-reg-name">Full Name</label>
+                <input type="text" id="admin-reg-name" required>
+            </div>
+            <div class="form-group">
+                <label for="admin-reg-email">Email</label>
+                <input type="email" id="admin-reg-email" required>
+            </div>
+            <div class="form-group">
+                <label for="admin-reg-phone">Mobile Number</label>
+                <input type="tel" id="admin-reg-phone" required>
+            </div>
+            <div class="form-group">
+                <label for="admin-reg-username">Username</label>
+                <input type="text" id="admin-reg-username" required>
+            </div>
+            <div class="form-group">
+                <label for="admin-reg-password">Password</label>
+                <input type="password" id="admin-reg-password" required>
+            </div>
+            <button type="submit" class="btn btn-primary" style="width: 100%;">Create Admin</button>
+        </form>
+    </div>
+
+    <!-- --- NEW: 11. Admin All Payments View --- -->
+    <div class="view" id="admin-payments-view">
+        <div class="container">
+            <h2 class="mb-2">All Payments</h2>
+            <div class="table-container">
+                <table>
+                    <thead>
+                    <tr>
+                        <th>Payment ID</th>
+                        <th>Loan ID</th>
+                        <th>User</th>
+                        <th>Amount</th>
+                        <th>Date</th>
+                        <th>Status</th>
+                    </tr>
+                    </thead>
+                    <tbody id="admin-payments-table-body">
+                    <!-- JS will populate this -->
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+
+</main>
+
+<!-- ======== UTILITY ELEMENTS ======== -->
+
+<!-- NEW: Payment Confirmation Modal -->
+<div id="payment-modal" class="modal-overlay hidden">
+    <div class="modal-content">
+        <h2>Confirm Payment</h2>
+        <div class="modal-details">
+            <p>You are about to pay:</p>
+            <p><strong>Amount:</strong> <span id="modal-pay-amount"></span></p>
+            <p><strong>For Loan ID:</strong> <span id="modal-pay-loan-id"></span></p>
+            <p><strong>Installment ID:</strong> <span id="modal-pay-installment-id"></span></p>
+        </div>
+        <div class="modal-actions">
+            <button id="modal-cancel-btn" class="btn btn-secondary">Cancel</button>
+            <button id="modal-confirm-btn" class="btn btn-success">Confirm Payment</button>
+        </div>
+    </div>
+</div>
+
+<!-- Toast Notification -->
+<div id="toast">This is a toast message.</div>
+
+<!-- Loading Spinner -->
+<div id="loader" class="hidden">
+    <div class="spinner"></div>
+</div>
+
+<!-- ======== JAVASCRIPT ======== -->
+<script>
+    // Wait for the DOM to be fully loaded before running scripts
+    document.addEventListener("DOMContentLoaded", () => {
+
+        // --- Global State ---
+        const state = {
+            token: null,
+            userId: null,
+            userName: null,
+            userEmail: null,
+            userRole: null
+        };
+
+        // This holds the complete list of loans fetched by the admin
+        // to avoid re-fetching when viewing details.
+        let adminLoanCache = [];
+
+        // --- UI Element Selectors ---
+        const allViews = document.querySelectorAll(".view");
+        const publicNav = document.getElementById("public-nav");
+        const userNav = document.getElementById("user-nav");
+        const adminNav = document.getElementById("admin-nav");
+        const loader = document.getElementById("loader");
+        const toast = document.getElementById("toast");
+        const paymentModal = document.getElementById("payment-modal");
+        const confirmPayBtn = document.getElementById("modal-confirm-btn");
+        const cancelPayBtn = document.getElementById("modal-cancel-btn");
+        // --- NEW: Second document button ---
+        const adminDoc2DownloadBtn = document.getElementById("admin-doc-2-download-btn");
+
+        // --- Utility Functions ---
+
+        /**
+         * Shows a loading spinner.
+         */
+        function showLoading() {
+            loader.classList.remove("hidden");
+        }
+
+        /**
+         * Hides the loading spinner.
+         */
+        function hideLoading() {
+            loader.classList.add("hidden");
+        }
+
+        /**
+         * Shows a toast notification.
+         * @param {string} message - The message to display.
+         * @param {'success' | 'error'} type - The type of toast.
+         */
+        function showToast(message, type = 'success') {
+            toast.textContent = message;
+            toast.className = type; // 'success' or 'error'
+            toast.classList.add('show');
+            setTimeout(() => {
+                toast.classList.remove('show');
+            }, 3000);
+        }
+
+        /**
+         * Main navigation function. Hides all views and shows the one with the specified ID.
+         * @param {string} viewId - The ID of the view to show.
+         */
+        function showView(viewId) {
+            allViews.forEach(view => {
+                view.style.display = "none";
+            });
+            const viewToShow = document.getElementById(viewId);
+            if (viewToShow) {
+                viewToShow.style.display = "block";
+            }
+
+            // Scroll to top on view change
+            window.scrollTo(0, 0);
+
+            // Check for data-loading functions
+            switch (viewId) {
+                case 'user-dashboard-view':
+                    loadUserDashboardSummary();
+                    break;
+                case 'user-loans-view':
+                    loadUserLoans();
+                    // Also hide installments when switching to this view initially
+                    document.getElementById("user-loan-installments").classList.add('hidden');
+                    break;
+                case 'user-payments-view':
+                    loadUserPayments();
+                    break;
+                case 'admin-dashboard-view':
+                    loadAdminLoans();
+                    break;
+                // NEW: Load admin payments
+                case 'admin-payments-view':
+                    loadAdminPayments();
+                    break;
+            }
+        }
+
+        /**
+         * Universal fetch wrapper for API calls.
+         * Handles loading, auth, and basic error handling.
+         * * FIX: Added a 'returnType' to handle blob responses
+         */
+        async function apiFetch(url, options = {}, returnType = 'json') {
+            showLoading();
+            try {
+                const headers = {
+                    ...options.headers
+                };
+
+                if (state.token) {
+                    headers['Authorization'] = `Bearer ${state.token}`;
+                }
+
+                if (!(options.body instanceof FormData) && returnType === 'json') {
+                     headers['Content-Type'] = 'application/json';
+                }
+
+                const response = await fetch(url, { ...options, headers });
+
+                if (!response.ok) {
+                    const errorData = await response.text();
+                    // Try to parse errorData as JSON for better messages
+                    try {
+                        const errorJson = JSON.parse(errorData);
+                        throw new Error(errorJson.message || errorData);
+                    } catch(e) {
+                        throw new Error(errorData || `Error: ${response.status} ${response.statusText}`);
+                    }
+                }
+
+                // FIX: Handle different response types
+                if (returnType === 'blob') {
+                    return await response.blob();
+                }
+
+                // Handle 200 OK responses that might not have JSON (e.g., "Loan rejected")
+                const contentType = response.headers.get("content-type");
+                if (contentType && contentType.indexOf("application/json") !== -1) {
+                    return await response.json();
+                } else {
+                    return await response.text();
+                }
+
+            } catch (err) {
+                console.error("API Fetch Error:", err);
+                showToast(err.message, 'error');
+                throw err; // Re-throw to be caught by calling function
+            } finally {
+                hideLoading();
+            }
+        }
+
+
+        /**
+         * Updates the UI based on the current login state.
+         */
+        function updateUIForLogin() {
+            if (state.token && state.userRole === 'USER') {
+                publicNav.classList.add("hidden");
+                adminNav.classList.add("hidden");
+                userNav.classList.remove("hidden");
+                document.getElementById("user-nav-name").textContent = `Welcome, ${state.userName}`;
+                showView('user-dashboard-view');
+            } else if (state.token && state.userRole === 'ADMIN') {
+                publicNav.classList.add("hidden");
+                userNav.classList.add("hidden");
+                adminNav.classList.remove("hidden");
+                document.getElementById("admin-nav-name").textContent = `Welcome, ${state.userName} (Admin)`;
+                showView('admin-dashboard-view');
+            } else {
+                // Logged out
+                publicNav.classList.remove("hidden");
+                userNav.classList.add("hidden");
+                adminNav.classList.add("hidden");
+                showView('home-view');
+            }
+        }
+
+        /**
+         * Handles the logout process.
+         */
+        function logout() {
+            state.token = null;
+            state.userId = null;
+            state.userName = null;
+            state.userEmail = null;
+            state.userRole = null;
+            // REMOVED: localStorage.removeItem("microlend-auth");
+            updateUIForLogin();
+            showToast("You have been logged out.", "success");
+        }
+
+        // --- Initialization ---
+        /**
+         * Checks localStorage for existing session data.
+         */
+        function initializeApp() {
+            // REMOVED: All localStorage logic has been removed.
+            // This ensures the app starts fresh (logged out) on every load.
+            updateUIForLogin();
+        }
+
+        // --- Event Listeners Setup ---
+
+        // General navigation clicks
+        document.body.addEventListener('click', (e) => {
+            let target = e.target;
+            // Check parent if the target is inside a button/link
+            if (!target.dataset.view) {
+                target = target.closest('[data-view]');
+            }
+
+            if (target && target.dataset.view) {
+                e.preventDefault();
+                showView(target.dataset.view);
+            }
+        });
+
+        // Logout buttons
+        document.getElementById("logout-btn-user").addEventListener('click', logout);
+        document.getElementById("logout-btn-admin").addEventListener('click', logout);
+
+        // --- Form Handlers ---
+
+        // 1. Registration
+        document.getElementById("register-form").addEventListener('submit', async (e) => {
+            e.preventDefault();
+            const body = {
+                name: document.getElementById("reg-name").value,
+                email: document.getElementById("reg-email").value,
+                phone: document.getElementById("reg-phone").value,
+                username: document.getElementById("reg-username").value,
+                password: document.getElementById("reg-password").value,
+                role: "USER" // Per requirement, public registration is USER only
+            };
+
+            try {
+                const data = await apiFetch('/api/auth/register', {
+                    method: 'POST',
+                    body: JSON.stringify(body)
+                });
+                showToast(data, 'success');
+                showView('login-view');
+                // Pre-fill email in login form
+                document.getElementById("login-email").value = body.email;
+            } catch (err) {
+                // Error toast is already handled by apiFetch
+            }
+        });
+
+        // 2. Login (Step 1: Request OTP)
+        document.getElementById("request-otp-btn").addEventListener('click', async () => {
+            const email = document.getElementById("login-email").value;
+            if (!email) {
+                showToast("Please enter your email.", 'error');
+                return;
+            }
+
+            try {
+                const data = await apiFetch(`/api/auth/request-otp?email=${encodeURIComponent(email)}`, {
+                    method: 'POST'
+                });
+                showToast(data, 'success');
+                document.getElementById("login-step-1").classList.add('hidden');
+                document.getElementById("login-step-2").classList.remove('hidden');
+                document.getElementById("login-email-display").textContent = email;
+            } catch (err) {
+                // Error
+            }
+        });
+
+        // 2. Login (Step 2: Verify OTP)
+        document.getElementById("login-otp-btn").addEventListener('click', async () => {
+            const email = document.getElementById("login-email").value;
+            const otp = document.getElementById("login-otp").value;
+
+            if (!otp) {
+                showToast("Please enter your OTP.", 'error');
+                return;
+            }
+
+            try {
+                const data = await apiFetch(`/api/auth/login-otp?email=${encodeURIComponent(email)}&otp=${encodeURIComponent(otp)}`, {
+                    method: 'POST'
+                });
+
+                // Save auth data to in-memory state
+                state.token = data.token;
+                state.userId = data.userId;
+                state.userName = data.name;
+                state.userEmail = data.email;
+                state.userRole = data.role;
+
+                // REMOVED: localStorage.setItem("microlend-auth", JSON.stringify(data));
+
+                showToast("Login successful!", 'success');
+                updateUIForLogin();
+
+                // Reset login form
+                document.getElementById("login-form").reset();
+                document.getElementById("login-step-2").classList.add('hidden');
+                document.getElementById("login-step-1").classList.remove('hidden');
+
+            } catch (err) {
+                // Error
+            }
+        });
+
+        // 3. User Request Loan
+        document.getElementById("request-loan-form").addEventListener('submit', async (e) => {
+            e.preventDefault();
+
+            const fileInput = document.getElementById("loan-document");
+            // --- NEW: Get second file input ---
+            const fileInput2 = document.getElementById("loan-document-2");
+
+            if (fileInput.files.length === 0 || fileInput2.files.length === 0) {
+                showToast("Please upload both documents.", 'error');
+                return;
+            }
+
+            const formData = new FormData();
+            formData.append("userId", state.userId);
+            formData.append("amount", document.getElementById("loan-amount").value);
+            formData.append("purpose", document.getElementById("loan-purpose").value);
+            formData.append("document", fileInput.files[0]);
+            // --- NEW: Append second file ---
+            formData.append("document2", fileInput2.files[0]);
+
+            try {
+                const data = await apiFetch('/api/loans/request', {
+                    method: 'POST',
+                    body: formData
+                    // No 'Content-Type' header, browser sets it for FormData
+                });
+                showToast("Loan application submitted successfully.", 'success');
+                showView('user-loans-view');
+                document.getElementById("request-loan-form").reset();
+            } catch (err) {
+                // Error
+            }
+        });
+
+        // 4. Admin Create Admin
+        document.getElementById("create-admin-form").addEventListener('submit', async (e) => {
+            e.preventDefault();
+            const body = {
+                name: document.getElementById("admin-reg-name").value,
+                email: document.getElementById("admin-reg-email").value,
+                phone: document.getElementById("admin-reg-phone").value,
+                username: document.getElementById("admin-reg-username").value,
+                password: document.getElementById("admin-reg-password").value,
+                role: "ADMIN" // Hard-coded per requirement
+            };
+
+            try {
+                const data = await apiFetch('/api/auth/register', {
+                    method: 'POST',
+                    body: JSON.stringify(body)
+                });
+                showToast(data, 'success');
+                document.getElementById("create-admin-form").reset();
+            } catch (err) {
+                // Error
+            }
+        });
+
+        // 5. Admin Approve Loan
+        document.getElementById("admin-approve-form").addEventListener('submit', async (e) => {
+            e.preventDefault();
+            const loanId = document.getElementById("admin-loan-detail-view").dataset.loanId;
+            const interestRate = document.getElementById("admin-interest-rate").value;
+            const termMonths = document.getElementById("admin-term-months").value;
+
+            // FIX: Use the correct param names to match AdminController
+            const url = `/api/admin/loans/approve/${loanId}?interestRate=${interestRate}&termMonths=${termMonths}`;
+
+            try {
+                await apiFetch(url, { method: 'PUT' });
+                showToast("Loan approved successfully.", 'success');
+                showView('admin-dashboard-view');
+            } catch(err) {
+                // error
+            }
+        });
+
+        // 6. Admin Reject Loan
+        document.getElementById("admin-reject-btn").addEventListener('click', async (e) => {
+            e.preventDefault();
+
+            if (window.confirm("Are you sure you want to reject this loan?")) {
+                const loanId = document.getElementById("admin-loan-detail-view").dataset.loanId;
+                const url = `/api/admin/loans/reject/${loanId}`;
+
+                try {
+                    await apiFetch(url, { method: 'PUT' });
+                    showToast("Loan rejected successfully.", 'success');
+                    showView('admin-dashboard-view');
+                } catch(err) {
+                    // error
+                }
+            }
+        });
+
+        // 7. Admin Download Document 1 Button
+        document.getElementById("admin-doc-download-btn").addEventListener('click', async (e) => {
+            const button = e.currentTarget;
+            const loanId = button.dataset.loanId;
+            const docName = button.dataset.docName;
+
+            // --- NEW: Pass docName to helper ---
+            downloadAdminDoc(loanId, docName, 1);
+        });
+
+        // --- NEW: 8. Admin Download Document 2 Button ---
+        adminDoc2DownloadBtn.addEventListener('click', async (e) => {
+            const button = e.currentTarget;
+            const loanId = button.dataset.loanId;
+            const docName = button.dataset.docName;
+
+            downloadAdminDoc(loanId, docName, 2);
+        });
+
+        // --- NEW: 9. Reusable Doc Download Helper ---
+        async function downloadAdminDoc(loanId, docName, docNumber = 1) {
+            if (!loanId) {
+                showToast("Error: No Loan ID found.", 'error');
+                return;
+            }
+
+            try {
+                // --- NEW: Choose URL based on doc number ---
+                const url = (docNumber === 2)
+                    ? `/api/admin/loans/${loanId}/document2?mode=download`
+                    : `/api/admin/loans/${loanId}/document?mode=download`;
+
+                const blob = await apiFetch(url, { method: 'GET' }, 'blob');
+
+                const objectUrl = URL.createObjectURL(blob);
+
+                const tempLink = document.createElement('a');
+                tempLink.href = objectUrl;
+                tempLink.setAttribute('download', docName || `document-${docNumber}`); // Use the original doc name
+                document.body.appendChild(tempLink);
+                tempLink.click();
+                document.body.removeChild(tempLink);
+
+                URL.revokeObjectURL(objectUrl);
+
+            } catch(err) {
+                showToast(`Failed to download document ${docNumber}.`, 'error');
+            }
+        }
+
+
+        // --- NEW: Payment Modal Handlers ---
+        cancelPayBtn.addEventListener('click', () => {
+            paymentModal.classList.add('hidden');
+        });
+
+        confirmPayBtn.addEventListener('click', async () => {
+            const button = confirmPayBtn;
+            const loanId = button.dataset.loanId;
+            const installmentId = button.dataset.installmentId;
+            const amount = button.dataset.amount;
+
+            try {
+                // 1. Initiate Payment
+                const p = await apiFetch(`/api/payments/initiate?loanId=${loanId}&installmentId=${installmentId}&amount=${amount}`, {
+                    method: 'POST'
+                });
+
+                showToast("Payment initiated... Verifying...", 'success');
+
+                // 2. Verify Payment (simulating success)
+                const verifiedPayment = await apiFetch(`/api/payments/verify?paymentId=${p.paymentid}&success=true`, {
+                    method: 'POST'
+                });
+
+                showToast("Payment Successful!", 'success');
+                paymentModal.classList.add('hidden');
+
+                // Refresh data
+                loadUserLoans();
+                loadUserPayments();
+            } catch(err) {
+                showToast("Payment Failed.", 'error');
+                paymentModal.classList.add('hidden');
+            }
+        });
+
+
+        // --- Data Loading Functions ---
+
+        // USER: Load Dashboard Summary
+        async function loadUserDashboardSummary() {
+            try {
+                const summary = await apiFetch(`/api/dashboard/summary/${state.userId}`);
+                document.getElementById("user-summary-outstanding").textContent = `₹${summary.outstandingAmount.toFixed(2)}`;
+                document.getElementById("user-summary-total-loan").textContent = `₹${summary.totalLoanAmount.toFixed(2)}`;
+                document.getElementById("user-summary-total-paid").textContent = `₹${summary.totalPaid.toFixed(2)}`;
+                document.getElementById("user-summary-total-loans").textContent = summary.totalLoans;
+            } catch (err) {
+                console.error("Failed to load dashboard summary:", err);
+            }
+        }
+
+        // USER: Load "My Loans"
+        async function loadUserLoans() {
+            const tableBody = document.getElementById("user-loans-table-body");
+            tableBody.innerHTML = "<tr><td colspan='7'>Loading...</td></tr>";
+            document.getElementById("user-loan-installments").classList.add('hidden'); // Hide installments
+            try {
+                const loans = await apiFetch(`/api/dashboard/loans/${state.userId}`);
+                if (loans.length === 0) {
+                    tableBody.innerHTML = "<tr><td colspan='7'>You have not requested any loans.</td></tr>";
+                    return;
+                }
+
+                tableBody.innerHTML = loans.map(loan => `
+                    <tr>
+                        <!-- FIX: Add ID prefix -->
+                        <td>MICR-LOAN-${loan.loanid}</td>
+                        <td>₹${loan.amount ? loan.amount.toFixed(2) : 'N/A'}</td>
+                        <td>${loan.interestRate || 'N/A'}%</td>
+                        <td>${loan.termMonths || 'N/A'}</td>
+                        <td>${loan.purpose}</td>
+                        <td><span class="status status-${loan.status}">${loan.status}</span></td>
+                        <td>
+                            ${loan.status === 'APPROVED' || loan.status === 'CLOSED' ?
+                                `<button class="btn btn-secondary" data-loan-id="${loan.loanid}" onclick="app.viewInstallments(${loan.loanid})">View Installments</button>` :
+                                '-'}
+                        </td>
+                    </tr>
+                `).join('');
+            } catch (err) {
+                tableBody.innerHTML = "<tr><td colspan'7'>Failed to load loans.</td></tr>";
+            }
+        }
+
+        // USER: Load "My Payments"
+        async function loadUserPayments() {
+            const tableBody = document.getElementById("user-payments-table-body");
+            tableBody.innerHTML = "<tr><td colspan='5'>Loading...</td></tr>";
+            try {
+                const payments = await apiFetch(`/api/dashboard/payments/${state.userId}`);
+                if (payments.length === 0) {
+                    tableBody.innerHTML = "<tr><td colspan='5'>You have not made any payments.</td></tr>";
+                    return;
+                }
+                tableBody.innerHTML = payments.map(p => `
+                    <tr>
+                        <!-- FIX: Add ID prefix -->
+                        <td>MICR-PAY-${p.paymentid}</td>
+                        <!-- FIX: Add ID prefix -->
+                        <td>${p.loan ? `MICR-LOAN-${p.loan.loanid}` : 'N/A'}</td>
+                        <td>₹${p.amount.toFixed(2)}</td>
+                        <td>${new Date(p.createdAt).toLocaleString()}</td>
+                        <td><span class="status status-${p.status.toUpperCase()}">${p.status}</span></td>
+                    </tr>
+                `).join('');
+            } catch (err) {
+                console.error("Failed to load payments:", err);
+                tableBody.innerHTML = "<tr><td colspan='5'>Failed to load payments.</td></tr>";
+            }
+        }
+
+        // USER: View/Pay Installments (exposed globally)
+        window.app = window.app || {}; // Create global namespace
+        window.app.viewInstallments = async (loanId) => {
+            const tableBody = document.getElementById("user-installments-table-body");
+            document.getElementById("user-loan-installments").classList.remove('hidden');
+            tableBody.innerHTML = "<tr><td colspan='4'>Loading...</td></tr>";
+
+            try {
+                const installments = await apiFetch(`/api/loans/${loanId}/installments`);
+                tableBody.innerHTML = installments.map(i => `
+                    <tr>
+                        <td>${new Date(i.dueDate).toLocaleDateString()}</td>
+                        <td>₹${i.amount.toFixed(2)}</td>
+                        <td>
+                            <span class="status status-${i.paid ? 'PAID' : 'PENDING'}">
+                                ${i.paid ? 'PAID' : (i.status || 'PENDING')}
+                            </span>
+                        </td>
+                        <td>
+                            ${!i.paid ?
+                                `<button class="btn btn-success" onclick="app.payInstallment(${i.installmentid}, ${i.amount}, ${loanId})">Pay Now</button>` :
+                                '-'}
+                        </td>
+                    </tr>
+                `).join('');
+            } catch(err) {
+                console.error("Failed to load installments:", err);
+                tableBody.innerHTML = "<tr><td colspan='4'>Failed to load installments.</td></tr>";
+            }
+        };
+
+        // USER: "Pay" Installment (Modal Trigger)
+        window.app.payInstallment = (installmentId, amount, loanId) => {
+            document.getElementById("modal-pay-amount").textContent = `₹${Number(amount).toFixed(2)}`;
+            // FIX: Add ID prefix
+            document.getElementById("modal-pay-loan-id").textContent = `MICR-LOAN-${loanId}`;
+            // FIX: Add ID prefix
+            document.getElementById("modal-pay-installment-id").textContent = `MICR-INST-${installmentId}`;
+
+            confirmPayBtn.dataset.loanId = loanId;
+            confirmPayBtn.dataset.installmentId = installmentId;
+            confirmPayBtn.dataset.amount = amount;
+
+            paymentModal.classList.remove('hidden');
+        };
+
+        // ADMIN: Load All Loans for Dashboard
+        async function loadAdminLoans() {
+            const tableBody = document.getElementById("admin-loans-table-body");
+            tableBody.innerHTML = "<tr><td colspan='6'>Loading...</td></tr>";
+            try {
+                const loans = await apiFetch('/api/admin/loans/getloans');
+                adminLoanCache = loans; // Cache the data
+
+                if (loans.length === 0) {
+                    tableBody.innerHTML = "<tr><td colspan='6'>No loans found.</td></tr>";
+                    return;
+                }
+
+                tableBody.innerHTML = loans.map(loan => `
+                    <tr>
+                        <!-- FIX: Add ID prefix -->
+                        <td>MICR-LOAN-${loan.loanid}</td>
+                        <td>${loan.user ? loan.user.name : '(User N/A)'}</td>
+                        <td>₹${loan.amount.toFixed(2)}</td>
+                        <td>${loan.purpose}</td>
+                        <td><span class="status status-${loan.status}">${loan.status}</span></td>
+                        <td>
+                            <button class="btn btn-secondary" onclick="app.viewAdminLoanDetail(${loan.loanid})">Review</button>
+                        </td>
+                    </tr>
+                `).join('');
+            } catch (err) {
+                console.error("Failed to load admin loans:", err);
+                tableBody.innerHTML = "<tr><td colspan='6'>Failed to load loans.</td></tr>";
+            }
+        }
+
+        // ADMIN: Show Loan Detail View
+        window.app.viewAdminLoanDetail = (loanId) => {
+            const loan = adminLoanCache.find(l => l.loanid === loanId);
+            if (!loan) {
+                showToast("Could not find loan details.", 'error');
+                return;
+            }
+
+            document.getElementById("admin-loan-detail-view").dataset.loanId = loanId;
+
+            // FIX: Add ID prefix
+            document.getElementById("admin-detail-loan-id").textContent = `(MICR-LOAN-${loanId})`;
+            document.getElementById("admin-detail-user").textContent = loan.user ? `${loan.user.name} (${loan.user.email})` : '(User N/A)';
+            document.getElementById("admin-detail-amount").textContent = `₹${loan.amount.toFixed(2)}`;
+            document.getElementById("admin-detail-purpose").textContent = loan.purpose;
+
+            // Set data attributes on the download button 1
+            const downloadBtn = document.getElementById("admin-doc-download-btn");
+            if (loan.documentName) {
+                downloadBtn.dataset.loanId = loan.loanid;
+                downloadBtn.dataset.docName = loan.documentName;
+                downloadBtn.classList.remove('hidden');
+            } else {
+                downloadBtn.classList.add('hidden');
+            }
+
+            // --- NEW: Set data for download button 2 ---
+            if (loan.document2Name) {
+                adminDoc2DownloadBtn.dataset.loanId = loan.loanid;
+                adminDoc2DownloadBtn.dataset.docName = loan.document2Name;
+                adminDoc2DownloadBtn.classList.remove('hidden');
+            } else {
+                adminDoc2DownloadBtn.classList.add('hidden');
+            }
+
+            // Show/hide action buttons
+            if(loan.status === 'PENDING') {
+                document.getElementById("admin-approve-form").classList.remove('hidden');
+                document.getElementById("admin-reject-btn").classList.remove('hidden');
+                document.getElementById("admin-interest-rate").value = '12.0';
+                document.getElementById("admin-term-months").value = '12';
+            } else {
+                document.getElementById("admin-approve-form").classList.add('hidden');
+                document.getElementById("admin-reject-btn").classList.add('hidden');
+            }
+
+            showView('admin-loan-detail-view');
+        };
+
+        // NEW: ADMIN: Load All Payments
+        async function loadAdminPayments() {
+            const tableBody = document.getElementById("admin-payments-table-body");
+            tableBody.innerHTML = "<tr><td colspan='6'>Loading...</td></tr>";
+            try {
+                const payments = await apiFetch('/api/admin/payments');
+
+                if (payments.length === 0) {
+                    tableBody.innerHTML = "<tr><td colspan='6'>No payments found.</td></tr>";
+                    return;
+                }
+
+                tableBody.innerHTML = payments.map(p => `
+                    <tr>
+                        <!-- FIX: Add ID prefix -->
+                        <td>MICR-PAY-${p.paymentid}</td>
+                        <!-- FIX: Add ID prefix -->
+                        <td>${p.loan ? `MICR-LOAN-${p.loan.loanid}` : 'N/A'}</td>
+                        <td>${(p.loan && p.loan.user) ? p.loan.user.name : 'N/A'}</td>
+                        <td>₹${p.amount.toFixed(2)}</td>
+                        <td>${new Date(p.createdAt).toLocaleString()}</td>
+                        <td><span class="status status-${p.status.toUpperCase()}">${p.status}</span></td>
+                    </tr>
+                `).join('');
+            } catch (err) {
+                console.error("Failed to load all payments:", err);
+                tableBody.innerHTML = "<tr><td colspan='6'>Failed to load payments.</td></tr>";
+            }
+        }
+
+        // --- Start the App ---
+        initializeApp();
+    });
+</script>
+</body>
+</html>
+
