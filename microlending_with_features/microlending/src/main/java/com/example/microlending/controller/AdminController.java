@@ -18,7 +18,7 @@ public class AdminController {
         this.loanService = loanService;
     }
 
-    // ✅ Approve Loan (Matches index.html)
+    //  Approve Loan (Matches index.html)
     @PutMapping("/approve/{loanId}")
     public ResponseEntity<Loan> approveLoan(@PathVariable Long loanId,
                                             @RequestParam Double interestRate,
@@ -27,20 +27,20 @@ public class AdminController {
         return ResponseEntity.ok(loan);
     }
 
-    // ✅ Reject Loan
+    //  Reject Loan
     @PutMapping("/reject/{loanId}")
     public ResponseEntity<String> rejectLoan(@PathVariable Long loanId) {
         loanService.rejectLoan(loanId);
         return ResponseEntity.ok("Loan rejected successfully");
     }
 
-    // ✅ View all loans (Uses query with JOIN FETCH User)
+    //  View all loans (Uses query with JOIN FETCH User)
     @GetMapping("/getloans")
     public ResponseEntity<?> viewAllLoans() {
         return ResponseEntity.ok(loanService.findAll());
     }
 
-    // ✅ Download or Preview Loan Document 1
+    //  Download or Preview Loan Document 1
     @GetMapping("/{loanId}/document")
     public ResponseEntity<Resource> getLoanDocument(@PathVariable Long loanId,
                                                     @RequestParam(defaultValue = "download") String mode) {
@@ -60,7 +60,7 @@ public class AdminController {
         }
     }
 
-    // ✅ Download or Preview Loan Document 2
+    //  Download or Preview Loan Document 2
     @GetMapping("/{loanId}/document2")
     public ResponseEntity<Resource> getLoanDocument2(@PathVariable Long loanId,
                                                      @RequestParam(defaultValue = "download") String mode) {
@@ -79,4 +79,5 @@ public class AdminController {
             return ResponseEntity.status(404).build();
         }
     }
+
 }
